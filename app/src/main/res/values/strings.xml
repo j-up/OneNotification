@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">OneNotification</string>
+    <string name="alarm_time_setting_korean">알람 시간 설정</string>
+    <string name="weather_setting_korean">날씨정보 선택</string>
+    <string name="news_setting_korean">기사정보 선택</string>
+    <string name="fashion_setting_korean">옷정보 받기</string>
 </resources>

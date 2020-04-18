@@ -1,4 +1,4 @@
-package com.jup.onenotification
+package com.jup.oneNotification
 
 import org.junit.Test
 
