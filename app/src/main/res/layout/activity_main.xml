@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="mainViewModel"
             type="com.jup.oneNotification.viewModel.MainViewModel" />
@@ -30,11 +29,13 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/time_setting_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00시 00분"
                 android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="@{() -> mainViewModel.onTimeSetting()}"/>
         </LinearLayout>
 
 
