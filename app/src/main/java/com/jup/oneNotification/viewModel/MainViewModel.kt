@@ -4,18 +4,21 @@ import android.app.TimePickerDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import java.util.*
+import com.jup.oneNotification.model.AlarmDate
+import com.jup.oneNotification.view.dialog.TimePickerFragment
 
-class MainViewModel: ViewModel() {
-    private val _onTimeSetting = MutableLiveData<Boolean>()
+class MainViewModel(private val timePickerDialog: TimePickerFragment): ViewModel() {
+    private val _timeSetComplete = MutableLiveData<AlarmDate>()
+    private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
 
-    val onTimeSetting: LiveData<Boolean> get () = _onTimeSetting
+    val timeSetComplete: LiveData<AlarmDate> get () = _timeSetComplete
+    val onTimeClickListener :LiveData<TimePickerFragment>  get () = _onTimeClickListener
 
-    fun onTimeSetting() {
-        /*TimePickerDialog(this, TimePickerDialog.OnTimeSetListener{ timePicker, hour, minute ->
-            println(hour)
-            println(minute)
-        }, cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE), true).show()*/
-        _onTimeSetting.value = true
+    fun onTimeClick() {
+        timePickerDialog.listener = TimePickerDialog.OnTimeSetListener{ _, hour, minute ->
+            _timeSetComplete.value = AlarmDate(hour,minute)
+        }
+        _onTimeClickListener.value = timePickerDialog
     }
 }
+
