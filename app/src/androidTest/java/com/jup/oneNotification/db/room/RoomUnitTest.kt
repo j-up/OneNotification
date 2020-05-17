@@ -34,9 +34,10 @@ class RoomUnitTest {
         dbCreate()
         Assert.assertNotNull("DB 생성실패", oneNotifyDatabase)
 
+        val insertData = Notify(0, 12, 20, 1, 1)
         dbInsert(
             // null을 파라미터로 넣을경우 실패
-            Notify(0, 12, 20, 1, 1)
+            insertData
         ).let {
             Assert.assertNotNull("DB 삽입실패", it)
             JLog.d(RoomUnitTest::class.java,"insert key: $it")
@@ -47,11 +48,11 @@ class RoomUnitTest {
 
             else -> {
                 dbSelectData.apply {
-                    Assert.assertEquals("id 불일치", id, 0)
-                    Assert.assertEquals("hour 불일치", hour, 12)
-                    Assert.assertEquals("minute 불일치", minute, 20)
-                    Assert.assertEquals("조선일보 구독 불일치", cho_subscribe_yn, 1)
-                    Assert.assertEquals("경향신문 구독 불일치", gyung_subscribe_yn, 1)
+                    Assert.assertEquals("id 불일치", id, insertData.id)
+                    Assert.assertEquals("hour 불일치", hour, insertData.hour)
+                    Assert.assertEquals("minute 불일치", minute, insertData.minute)
+                    Assert.assertEquals("조선일보 구독 불일치", cho_subscribe_yn, insertData.cho_subscribe_yn)
+                    Assert.assertEquals("경향신문 구독 불일치", gyung_subscribe_yn, insertData.gyung_subscribe_yn)
                 }
             }
         }
