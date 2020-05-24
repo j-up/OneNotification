@@ -54,15 +54,18 @@
                 android:textStyle="bold" />
 
             <RadioGroup
+                android:id="@+id/weather_radio_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:id="@+id/open_weather_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="OpenWeather" />
 
                 <RadioButton
+                    android:id="@+id/korea_weather_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="기상청" />

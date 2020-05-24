@@ -8,10 +8,12 @@ data class AlarmDate(val hour: Int, val minute: Int) {
 
 class KeyData {
     companion object {
+        val KEY_TIME_HOUR = "KEY_TIME_HOUR"
+        val KEY_TIME_MINUTE = "KEY_TIME_MINUTE"
 
-        val TIME_HOUR = "KEY_TIME_HOUR"
-        val TIME_MINUTE = "KEY_TIME_MINUTE"
-
+        val KEY_WEATHER = "KEY_WEATHER"
+        val VALUE_WEATHER_OPEN_WEATHER = 2001
+        val VALUE_WEATHER_KOREA_WEATHER = 2002
     }
 }
 

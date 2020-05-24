@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import com.jup.oneNotification.model.KeyData
 import java.util.*
 
-class TimePickerFragment() : DialogFragment() {
+class TimePickerFragment : DialogFragment() {
     var listener:TimePickerDialog.OnTimeSetListener? = null
     lateinit var sharedPreferences:SharedPreferences
     private val cal = Calendar.getInstance()
@@ -25,8 +25,8 @@ class TimePickerFragment() : DialogFragment() {
         context,
         android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth,
         listener,
-        sharedPreferences.getInt(KeyData.TIME_HOUR,cal.get(Calendar.HOUR)),
-        sharedPreferences.getInt(KeyData.TIME_MINUTE,cal.get(Calendar.MINUTE)),
+        sharedPreferences.getInt(KeyData.KEY_TIME_HOUR,cal.get(Calendar.HOUR)),
+        sharedPreferences.getInt(KeyData.KEY_TIME_MINUTE,cal.get(Calendar.MINUTE)),
         false
     )
 

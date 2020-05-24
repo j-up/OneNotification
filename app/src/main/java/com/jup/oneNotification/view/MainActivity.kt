@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.jup.oneNotification.R
 import com.jup.oneNotification.databinding.ActivityMainBinding
+import com.jup.oneNotification.model.KeyData
 import com.jup.oneNotification.utils.JLog
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import com.jup.oneNotification.viewModel.MainViewModel
@@ -30,6 +31,14 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.timeSetComplete.observe(this, Observer {
             JLog.d(this::class.java,"Set Time - ${it.toString()}")
             time_setting_text_view.text = it.toString()
+        })
+
+        mainViewModel.weatherSetComplete.observe(this, Observer {
+            JLog.d(this::class.java,"Set Weather - ${it.toString()}")
+            when(it) {
+                KeyData.VALUE_WEATHER_OPEN_WEATHER -> open_weather_radio_button.isChecked = true
+                KeyData.VALUE_WEATHER_KOREA_WEATHER -> korea_weather_radio_button.isChecked = true
+            }
         })
 
         binding.mainViewModel=mainViewModel
