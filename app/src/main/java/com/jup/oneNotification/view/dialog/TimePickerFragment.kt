@@ -22,7 +22,12 @@ class TimePickerFragment() : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = TimePickerDialog(
-        context, listener, sharedPreferences.getInt(KeyData.TIME_HOUR,cal.get(Calendar.HOUR)),  sharedPreferences.getInt(KeyData.TIME_MINUTE,cal.get(Calendar.MINUTE)), true
+        context,
+        android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth,
+        listener,
+        sharedPreferences.getInt(KeyData.TIME_HOUR,cal.get(Calendar.HOUR)),
+        sharedPreferences.getInt(KeyData.TIME_MINUTE,cal.get(Calendar.MINUTE)),
+        false
     )
 
 }
