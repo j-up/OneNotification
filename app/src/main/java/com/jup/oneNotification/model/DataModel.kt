@@ -5,3 +5,13 @@ data class AlarmDate(val hour: Int, val minute: Int) {
         return "$hour : $minute"
     }
 }
+
+class KeyData {
+    companion object {
+
+        val TIME_HOUR = "KEY_TIME_HOUR"
+        val TIME_MINUTE = "KEY_TIME_MINUTE"
+
+    }
+}
+

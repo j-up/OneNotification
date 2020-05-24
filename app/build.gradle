@@ -44,6 +44,7 @@ dependencies {
     implementation "org.koin:koin-core-ext:$koin_version"
     testImplementation "org.koin:koin-test:$koin_version"
     implementation "org.koin:koin-java:$koin_version"
+    implementation "org.koin:koin-android-ext:$koin_version"
 
     implementation "androidx.room:room-runtime:$room_version"
     kapt  "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor

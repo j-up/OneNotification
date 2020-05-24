@@ -1,6 +1,7 @@
 package com.jup.oneNotification
 
 import android.app.Application
+import org.koin.android.ext.koin.androidContext
 import com.jup.oneNotification.core.module.appModule
 import org.koin.core.context.startKoin
 
@@ -10,6 +11,7 @@ class MyApplication: Application() {
 
         startKoin {
             printLogger()
+            androidContext(this@MyApplication)
             modules(appModule)
         }
     }
