@@ -2,6 +2,8 @@ package com.jup.oneNotification.viewModel
 
 import android.app.TimePickerDialog
 import android.content.SharedPreferences
+import android.view.View
+import android.widget.CheckBox
 import android.widget.RadioGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,14 +20,17 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
     private val _timeSetComplete = MutableLiveData<AlarmDate>()
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
     private val _weatherSetComplete = MutableLiveData<Int>()
+    private val _newsSetComplete = MutableLiveData<ArrayList<String>>()
 
     val timeSetComplete: LiveData<AlarmDate> get () = _timeSetComplete
     val onTimeClickListener: LiveData<TimePickerFragment>  get () = _onTimeClickListener
     val weatherSetComplete: LiveData<Int> get () = _weatherSetComplete
+    val newsSetComplete: LiveData<ArrayList<String>> get () =_newsSetComplete
 
     init{
         initTime()
         initWeather()
+        initNews()
     }
 
     fun onTimeClick() {
@@ -45,7 +50,6 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
         var checkValue = KeyData.VALUE_WEATHER_OPEN_WEATHER
         when(id) {
             R.id.open_weather_radio_button -> checkValue = KeyData.VALUE_WEATHER_OPEN_WEATHER
-
             R.id.korea_weather_radio_button -> checkValue = KeyData.VALUE_WEATHER_KOREA_WEATHER
         }
 
@@ -53,7 +57,24 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
             putInt(KeyData.KEY_WEATHER, checkValue).commit()
         }
 
-        JLog.d(this::class.java, "Radio Click - $checkValue")
+    }
+
+    fun onNewsClick(view: View) {
+        var checked: Boolean = false
+
+        if(view is CheckBox) {
+            checked = view.isChecked
+        }
+
+        when(view.id) {
+            R.id.cho_check_box -> with(sharedPreferences.edit()) {
+                putBoolean(KeyData.KEY_NEWS_CHO, checked).commit()
+            }
+
+            R.id.khan_check_box -> with(sharedPreferences.edit()) {
+                putBoolean(KeyData.KEY_NEWS_KHAN, checked).commit()
+            }
+        }
     }
 
     private fun initTime() {
@@ -88,7 +109,20 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
             weatherValue = KeyData.VALUE_WEATHER_OPEN_WEATHER
         }
             _weatherSetComplete.value = weatherValue
-            JLog.d(this::class.java,"Set Weather - ${_weatherSetComplete.value.toString()}")
+    }
+
+
+    private fun initNews() {
+        val valueMap = mutableMapOf<String,Boolean>()
+        valueMap[KeyData.KEY_NEWS_CHO] = sharedPreferences.getBoolean(KeyData.KEY_NEWS_CHO,false)
+        valueMap[KeyData.KEY_NEWS_KHAN] = sharedPreferences.getBoolean(KeyData.KEY_NEWS_KHAN,false)
+
+        val trueList = arrayListOf<String>()
+        valueMap.forEach { (key, value) ->
+            if(value) trueList.add(key)
+        }
+
+        _newsSetComplete.value = trueList
     }
 }
 

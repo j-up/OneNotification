@@ -88,13 +88,17 @@
                 android:textStyle="bold" />
 
             <CheckBox
+                android:id="@+id/cho_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{mainViewModel.onNewsClick}"
                 android:text="조선일보" />
 
             <CheckBox
+                android:id="@+id/khan_check_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{mainViewModel.onNewsClick}"
                 android:text="경향신문" />
         </LinearLayout>
 

@@ -39,6 +39,17 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        mainViewModel.newsSetComplete.observe(this, Observer {
+            val iterator = it.iterator()
+
+            while(iterator.hasNext()) {
+                when(iterator.next()) {
+                    KeyData.KEY_NEWS_CHO -> cho_check_box.isChecked = true
+                    KeyData.KEY_NEWS_KHAN -> khan_check_box.isChecked = true
+                }
+            }
+        })
+
         binding.mainViewModel=mainViewModel
         binding.lifecycleOwner=this@MainActivity
     }
