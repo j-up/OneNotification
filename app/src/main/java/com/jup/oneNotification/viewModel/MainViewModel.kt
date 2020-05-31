@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.content.SharedPreferences
 import android.view.View
 import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.RadioGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,16 +22,19 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
     private val _weatherSetComplete = MutableLiveData<Int>()
     private val _newsSetComplete = MutableLiveData<ArrayList<String>>()
+    private val _fashionSetComplete = MutableLiveData<Boolean>()
 
     val timeSetComplete: LiveData<AlarmDate> get () = _timeSetComplete
     val onTimeClickListener: LiveData<TimePickerFragment>  get () = _onTimeClickListener
     val weatherSetComplete: LiveData<Int> get () = _weatherSetComplete
     val newsSetComplete: LiveData<ArrayList<String>> get () =_newsSetComplete
+    val fashionSetComplete: LiveData<Boolean> get () = _fashionSetComplete
 
     init{
         initTime()
         initWeather()
         initNews()
+        initFashion()
     }
 
     fun onTimeClick() {
@@ -74,6 +78,12 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
             R.id.khan_check_box -> with(sharedPreferences.edit()) {
                 putBoolean(KeyData.KEY_NEWS_KHAN, checked).commit()
             }
+        }
+    }
+
+    fun onFashionClick(view: CompoundButton, isChecked:Boolean) {
+        with(sharedPreferences.edit()) {
+            putBoolean(KeyData.KEY_FASHION, isChecked).commit()
         }
     }
 
@@ -123,6 +133,11 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
         }
 
         _newsSetComplete.value = trueList
+    }
+
+    private fun initFashion() {
+        val value = sharedPreferences.getBoolean(KeyData.KEY_FASHION,false)
+        if(value) _fashionSetComplete.value = value
     }
 }
 

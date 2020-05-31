@@ -50,6 +50,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        mainViewModel.fashionSetComplete.observe(this, Observer {
+            fashion_switch.isChecked = it
+        })
+
         binding.mainViewModel=mainViewModel
         binding.lifecycleOwner=this@MainActivity
     }

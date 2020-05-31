@@ -33,6 +33,8 @@ class KeyData {
         const val KEY_NEWS_CHO = "KEY_NEWS_CHO"
         const val KEY_NEWS_KHAN = "KEY_NEWS_KHAN"
 
+        const val KEY_FASHION = "KEY_FASHION"
+
     }
 }
 

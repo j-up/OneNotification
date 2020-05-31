@@ -110,8 +110,9 @@
             android:padding="10dp">
 
             <Switch
-                android:id="@+id/switch1"
+                android:id="@+id/fashion_switch"
                 android:layout_width="wrap_content"
+                android:onCheckedChanged="@{mainViewModel.onFashionClick}"
                 android:layout_height="wrap_content"/>
             <TextView
                 android:layout_width="wrap_content"
