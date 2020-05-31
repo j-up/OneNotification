@@ -1,6 +1,5 @@
 package com.jup.oneNotification.viewModel
 
-import android.app.Application
 import android.app.TimePickerDialog
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
@@ -8,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jup.oneNotification.model.AlarmDate
 import com.jup.oneNotification.model.KeyData
+import com.jup.oneNotification.utils.JLog
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import java.util.*
 
@@ -29,6 +29,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
     fun onTimeClick() {
         timePickerDialog.listener = TimePickerDialog.OnTimeSetListener{ _, hour, minute ->
             _timeSetComplete.value = AlarmDate(hour,minute)
+            JLog.d(this::class.java,"Set Time - ${_timeSetComplete.value.toString()}")
 
             with(sharedPreferences.edit()) {
                 putInt(KeyData.KEY_TIME_HOUR,hour).commit()
@@ -39,11 +40,11 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
     }
 
     private fun initTime() {
-        val hour = sharedPreferences.getInt(KeyData.KEY_TIME_HOUR, 0)
-        val minute = sharedPreferences.getInt(KeyData.KEY_TIME_HOUR, 0)
+        val hour = sharedPreferences.getInt(KeyData.KEY_TIME_HOUR, 404)
+        val minute = sharedPreferences.getInt(KeyData.KEY_TIME_HOUR, 404)
 
         // 값이 없을때 현재 시간으로 초기화
-        if (hour==0 || minute ==0) {
+        if (hour == 404 || minute == 404) {
             with(sharedPreferences.edit()) {
                 putInt(KeyData.KEY_TIME_HOUR, cal.get(Calendar.HOUR)).commit()
                 putInt(KeyData.KEY_TIME_MINUTE, cal.get(Calendar.MINUTE)).commit()
@@ -71,6 +72,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
 
         sharedPreferences.getInt(KeyData.KEY_WEATHER, 0).also {
             _weatherSetComplete.value = it
+            JLog.d(this::class.java,"Set Weather - ${_weatherSetComplete.value.toString()}")
         }
 
     }
