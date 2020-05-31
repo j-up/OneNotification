@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:onClick="@{() -> mainViewModel.onTimeClick()}"
         tools:context=".view.MainActivity">
 
         <LinearLayout
@@ -20,6 +19,7 @@
             android:layout_height="wrap_content"
             android:background="#808080"
             android:orientation="vertical"
+            android:onClick="@{() -> mainViewModel.onTimeClick()}"
             android:padding="10dp">
 
             <TextView
@@ -56,7 +56,8 @@
             <RadioGroup
                 android:id="@+id/weather_radio_group"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{mainViewModel.onWeatherClick}">
 
                 <RadioButton
                     android:id="@+id/open_weather_radio_button"

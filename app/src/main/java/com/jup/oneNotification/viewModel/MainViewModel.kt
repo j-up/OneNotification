@@ -2,9 +2,11 @@ package com.jup.oneNotification.viewModel
 
 import android.app.TimePickerDialog
 import android.content.SharedPreferences
+import android.widget.RadioGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jup.oneNotification.R
 import com.jup.oneNotification.model.AlarmDate
 import com.jup.oneNotification.model.KeyData
 import com.jup.oneNotification.utils.JLog
@@ -39,6 +41,21 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
         _onTimeClickListener.value = timePickerDialog
     }
 
+    fun onWeatherClick(radioGroup: RadioGroup, id:Int) {
+        var checkValue = KeyData.VALUE_WEATHER_OPEN_WEATHER
+        when(id) {
+            R.id.open_weather_radio_button -> checkValue = KeyData.VALUE_WEATHER_OPEN_WEATHER
+
+            R.id.korea_weather_radio_button -> checkValue = KeyData.VALUE_WEATHER_KOREA_WEATHER
+        }
+
+        with(sharedPreferences.edit()) {
+            putInt(KeyData.KEY_WEATHER, checkValue).commit()
+        }
+
+        JLog.d(this::class.java, "Radio Click - $checkValue")
+    }
+
     private fun initTime() {
         val hour = sharedPreferences.getInt(KeyData.KEY_TIME_HOUR, 404)
         val minute = sharedPreferences.getInt(KeyData.KEY_TIME_HOUR, 404)
@@ -61,20 +78,17 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
 
 
     private fun initWeather() {
-        val weatherValue = sharedPreferences.getInt(KeyData.KEY_WEATHER,2404)
+        var weatherValue = sharedPreferences.getInt(KeyData.KEY_WEATHER,404)
 
         // 값이 없을때 openWeather 초기화
-        if (weatherValue == 2404) {
+        if (weatherValue == 404) {
             with(sharedPreferences.edit()) {
                 putInt(KeyData.KEY_WEATHER, KeyData.VALUE_WEATHER_OPEN_WEATHER).commit()
             }
+            weatherValue = KeyData.VALUE_WEATHER_OPEN_WEATHER
         }
-
-        sharedPreferences.getInt(KeyData.KEY_WEATHER, 0).also {
-            _weatherSetComplete.value = it
+            _weatherSetComplete.value = weatherValue
             JLog.d(this::class.java,"Set Weather - ${_weatherSetComplete.value.toString()}")
-        }
-
     }
 }
 
