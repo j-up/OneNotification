@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.jup.oneNotification.R
+import com.jup.oneNotification.core.provider.AddressProvider
 import com.jup.oneNotification.databinding.ActivityMainBinding
 import com.jup.oneNotification.model.KeyData
 import com.jup.oneNotification.utils.JLog
@@ -16,13 +17,14 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
     private val sharedPreferences: SharedPreferences by inject()
+    private val addressProvider: AddressProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         val timePickerFragment = TimePickerFragment.newInstance(null,sharedPreferences)
-        val mainViewModel = MainViewModel(timePickerFragment,sharedPreferences)
+        val mainViewModel = MainViewModel(timePickerFragment,sharedPreferences,addressProvider)
 
         mainViewModel.onTimeClickListener.observe(this, Observer {
             it.show(supportFragmentManager,"TIME_PICKER")
@@ -56,5 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.mainViewModel=mainViewModel
         binding.lifecycleOwner=this@MainActivity
+
+
     }
 }

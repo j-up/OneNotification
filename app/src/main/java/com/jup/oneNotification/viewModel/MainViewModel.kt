@@ -1,7 +1,9 @@
 package com.jup.oneNotification.viewModel
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.content.SharedPreferences
+import android.location.Location
 import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
@@ -10,25 +12,34 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jup.oneNotification.R
+import com.jup.oneNotification.core.provider.AddressProvider
+import com.jup.oneNotification.core.service.FetchAddressIntentService
 import com.jup.oneNotification.model.AlarmDate
 import com.jup.oneNotification.model.KeyData
 import com.jup.oneNotification.utils.JLog
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import java.util.*
+import kotlin.collections.ArrayList
 
-class MainViewModel(private val timePickerDialog: TimePickerFragment, private val sharedPreferences: SharedPreferences): ViewModel() {
+class MainViewModel(private val timePickerDialog: TimePickerFragment, private val sharedPreferences: SharedPreferences
+    ,private val addressProvider: AddressProvider): ViewModel() {
     private val cal = Calendar.getInstance()
     private val _timeSetComplete = MutableLiveData<AlarmDate>()
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
     private val _weatherSetComplete = MutableLiveData<Int>()
+    private val _locationSetComplete = MutableLiveData<String>()
     private val _newsSetComplete = MutableLiveData<ArrayList<String>>()
     private val _fashionSetComplete = MutableLiveData<Boolean>()
+    private val _permissionCheck = MutableLiveData<ArrayList<String>>()
 
     val timeSetComplete: LiveData<AlarmDate> get () = _timeSetComplete
     val onTimeClickListener: LiveData<TimePickerFragment>  get () = _onTimeClickListener
     val weatherSetComplete: LiveData<Int> get () = _weatherSetComplete
+    val locationSetComplete: LiveData<String> get () = _locationSetComplete
     val newsSetComplete: LiveData<ArrayList<String>> get () =_newsSetComplete
     val fashionSetComplete: LiveData<Boolean> get () = _fashionSetComplete
+    val permissionCheck: LiveData<ArrayList<String>> get () = _permissionCheck
+
 
     init{
         initTime()
@@ -60,7 +71,12 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
         with(sharedPreferences.edit()) {
             putInt(KeyData.KEY_WEATHER, checkValue).commit()
         }
+    }
 
+    fun onLocationClick() {
+
+        JLog.d(this::class.java,"click")
+        addressProvider.startIntentService()
     }
 
     fun onNewsClick(view: View) {

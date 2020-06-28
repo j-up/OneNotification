@@ -35,13 +35,15 @@ class RoomUnitTest {
         Assert.assertNotNull("DB 생성실패", oneNotifyDatabase)
 
         val insertData = Notify(0, 12, 20, 1, 1)
-        dbInsert(
+
+        CoroutineScope(Dispatchers.IO).launch {
             // null을 파라미터로 넣을경우 실패
-            insertData
-        ).let {
-            Assert.assertNotNull("DB 삽입실패", it)
-            JLog.d(RoomUnitTest::class.java,"insert key: $it")
+            dbInsert(insertData).let {
+                Assert.assertNotNull("DB 삽입실패", it)
+                JLog.d(RoomUnitTest::class.java,"insert key: $it")
+            }
         }
+
 
         when(val dbSelectData = dbSelect(0)) {
             null -> JLog.d(RoomUnitTest::class.java,"DB 조회 값 없음")
@@ -68,10 +70,10 @@ class RoomUnitTest {
     param: 기본 키 id
     return: 성공시 기본 키 값 반환
      */
-    private fun dbInsert(insertData: Notify): Long? {
+    private suspend fun dbInsert(insertData: Notify): Long? {
         var insertResult: Long? = null
 
-        runBlocking {
+        withContext(Dispatchers.IO) {
             insertResult = oneNotifyDatabase?.notifyDao()?.insert(insertData)
         }.run {
             return insertResult
