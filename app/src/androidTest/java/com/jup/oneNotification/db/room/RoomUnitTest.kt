@@ -19,12 +19,12 @@ class RoomUnitTest {
     lateinit var context: Context
 
     @Before
-    fun dbCreateTest() {
+    fun beforeTest() {
         context = ApplicationProvider.getApplicationContext<Context>()
     }
 
     @After
-    fun dbCloseTest() {
+    fun afterTest() {
         OneNotifyDatabase.close()
     }
 
