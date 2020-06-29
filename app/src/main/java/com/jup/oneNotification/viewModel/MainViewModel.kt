@@ -1,5 +1,6 @@
 package com.jup.oneNotification.viewModel
 
+import android.Manifest
 import android.app.TimePickerDialog
 import android.content.SharedPreferences
 import android.view.View
@@ -38,6 +39,10 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
     val fashionSetComplete: LiveData<Boolean> get () = _fashionSetComplete
     val permissionCheck: LiveData<ArrayList<String>> get () = _permissionCheck
 
+    private val permissions = arrayListOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
 
     init{
         initTime()
@@ -72,9 +77,13 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
     }
 
     fun onLocationClick() {
+        val notPermissionList = requestPermission.checkPermissions(permissions)
+        when(notPermissionList.size) {
+            0 -> addressProvider.startIntentService()
+            //else -> _permissionCheck.value = notPermissionList
+        }
 
-        JLog.d(this::class.java,"click")
-        addressProvider.startIntentService()
+        //addressProvider.startIntentService()
     }
 
     fun onNewsClick(view: View) {

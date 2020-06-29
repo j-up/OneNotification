@@ -18,7 +18,7 @@ val appModule = module{
     // mainViewModel
     single { TimePickerFragment.newInstance(null,get()) }
     single { AddressProvider(it[0]) }
-    single { RequestPermission(it[0],it[1])}
+    single { RequestPermission(it[0])}
 
     single { MainViewModel(get(),get(),get(),get()) }
 }
