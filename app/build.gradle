@@ -50,6 +50,10 @@ dependencies {
     kapt  "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
     kaptAndroidTest "androidx.room:room-compiler:$room_version"
 
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
     testImplementation 'junit:junit:4.12'
