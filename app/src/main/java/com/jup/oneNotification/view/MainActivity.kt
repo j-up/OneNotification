@@ -32,14 +32,14 @@ class MainActivity : AppCompatActivity() {
     private val addressProvider: AddressProvider by inject{ parametersOf(applicationContext) }
     private val requestPermission: RequestPermission by inject{ parametersOf(applicationContext)  }
 
-    private val mainViewModel: MainViewModel by inject{ parametersOf(timePickerFragment,sharedPreferences,addressProvider,requestPermission) }
+    private lateinit var mainViewModel: MainViewModel
     private lateinit var requestPermissionArray: Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
-
+        mainViewModel = MainViewModel(timePickerFragment,sharedPreferences,addressProvider,requestPermission)
         mainViewModel.onTimeClickListener.observe(this, Observer {
             it.show(supportFragmentManager,"TIME_PICKER")
         })
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainViewModel.permissionCheck.observe(this, Observer {
-            it.toArray(requestPermissionArray)
+            requestPermissionArray = it.toArray() as Array<String>
             ActivityCompat.requestPermissions(this, requestPermissionArray, PERMISSION_REQUEST_CODE)
         })
 

@@ -16,6 +16,5 @@ class RequestPermission(private val context: Context) {
         }
 
         return rejectedPermissionList
-
     }
 }

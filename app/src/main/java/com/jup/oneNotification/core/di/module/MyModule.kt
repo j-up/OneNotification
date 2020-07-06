@@ -20,7 +20,7 @@ val appModule = module{
     single { AddressProvider(it[0]) }
     single { RequestPermission(it[0])}
 
-    single { MainViewModel(get(),get(),get(),get()) }
+    single { MainViewModel(it[0], get() , it[2], it[3]) }
 }
 
 private fun provideSettingsPreferences(app: Application): SharedPreferences =

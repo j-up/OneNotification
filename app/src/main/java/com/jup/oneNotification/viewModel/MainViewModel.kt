@@ -3,6 +3,7 @@ package com.jup.oneNotification.viewModel
 import android.Manifest
 import android.app.TimePickerDialog
 import android.content.SharedPreferences
+import android.os.SystemClock
 import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
@@ -18,10 +19,12 @@ import com.jup.oneNotification.utils.JLog
 import com.jup.oneNotification.utils.RequestPermission
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import java.util.*
-import kotlin.collections.ArrayList
 
-class MainViewModel(private val timePickerDialog: TimePickerFragment, private val sharedPreferences: SharedPreferences
-    ,private val addressProvider: AddressProvider, private val requestPermission: RequestPermission): ViewModel() {
+
+class MainViewModel(private val timePickerDialog: TimePickerFragment
+                    , private val sharedPreferences: SharedPreferences
+                    , private val addressProvider: AddressProvider
+                    , private val requestPermission: RequestPermission): ViewModel() {
     private val cal = Calendar.getInstance()
     private val _timeSetComplete = MutableLiveData<AlarmDate>()
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
@@ -39,10 +42,23 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
     val fashionSetComplete: LiveData<Boolean> get () = _fashionSetComplete
     val permissionCheck: LiveData<ArrayList<String>> get () = _permissionCheck
 
+    private val MIN_CLICK_INTERVAL: Long = 600
+    private var mLastClickTime: Long = 0
+
     private val permissions = arrayListOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
+
+    private val timeSetListener = TimePickerDialog.OnTimeSetListener{ _, hour, minute ->
+        _timeSetComplete.value = AlarmDate(hour,minute)
+        JLog.d(this::class.java,"Set Time - ${_timeSetComplete.value.toString()}")
+
+        with(sharedPreferences.edit()) {
+            putInt(KeyData.KEY_TIME_HOUR,hour).commit()
+            putInt(KeyData.KEY_TIME_MINUTE,minute).commit()
+        }
+    }
 
     init{
         initTime()
@@ -52,15 +68,17 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
     }
 
     fun onTimeClick() {
-        timePickerDialog.listener = TimePickerDialog.OnTimeSetListener{ _, hour, minute ->
-            _timeSetComplete.value = AlarmDate(hour,minute)
-            JLog.d(this::class.java,"Set Time - ${_timeSetComplete.value.toString()}")
+        val currentClickTime = SystemClock.uptimeMillis()
+        val elapsedTime = currentClickTime - mLastClickTime
+        mLastClickTime = currentClickTime
 
-            with(sharedPreferences.edit()) {
-                putInt(KeyData.KEY_TIME_HOUR,hour).commit()
-                putInt(KeyData.KEY_TIME_MINUTE,minute).commit()
-            }
+        if (elapsedTime < MIN_CLICK_INTERVAL) {
+            return
         }
+
+        JLog.d(this::class.java,"onTileClick")
+         timePickerDialog.listener = timeSetListener
+
         _onTimeClickListener.value = timePickerDialog
     }
 
@@ -72,7 +90,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
         }
 
         with(sharedPreferences.edit()) {
-            putInt(KeyData.KEY_WEATHER, checkValue).commit()
+            putInt(KeyData.KEY_WEATHER, checkValue).apply()
         }
     }
 
@@ -80,7 +98,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment, private va
         val notPermissionList = requestPermission.checkPermissions(permissions)
         when(notPermissionList.size) {
             0 -> addressProvider.startIntentService()
-            //else -> _permissionCheck.value = notPermissionList
+            else -> _permissionCheck.value = notPermissionList
         }
 
         //addressProvider.startIntentService()
