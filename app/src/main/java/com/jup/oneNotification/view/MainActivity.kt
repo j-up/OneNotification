@@ -15,7 +15,11 @@ import com.jup.oneNotification.R
 import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.databinding.ActivityMainBinding
 import com.jup.oneNotification.core.common.KeyData
+<<<<<<< HEAD
 import com.jup.oneNotification.utils.RequestPermission
+=======
+import com.jup.oneNotification.utils.JLog
+>>>>>>> c7094647381583b99a2bdf3718aa68abce978301
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import com.jup.oneNotification.viewModel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*

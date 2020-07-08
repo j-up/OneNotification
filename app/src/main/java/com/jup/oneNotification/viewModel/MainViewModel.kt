@@ -16,7 +16,11 @@ import com.jup.oneNotification.core.common.KeyData
 import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.core.service.LocationWorker
 import com.jup.oneNotification.model.AlarmDate
+<<<<<<< HEAD
 import com.jup.oneNotification.model.LocationModel
+=======
+import com.jup.oneNotification.core.common.KeyData
+>>>>>>> c7094647381583b99a2bdf3718aa68abce978301
 import com.jup.oneNotification.utils.JLog
 import com.jup.oneNotification.utils.RequestPermission
 import com.jup.oneNotification.view.dialog.TimePickerFragment
