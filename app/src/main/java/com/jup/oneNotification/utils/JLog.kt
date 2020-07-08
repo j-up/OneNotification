@@ -1,13 +1,16 @@
 package com.jup.oneNotification.utils
 
-import android.content.Context
 import android.util.Log
 
 class JLog {
     companion object {
         private const val TAG_NAME = "Jup"
 
-        fun<T> d(myClass: Class<T>, msg: String) {
+        fun<T> e(myClass:  Class<T>, msg: String) {
+            Log.e(TAG_NAME, "${myClass.simpleName} : $msg")
+        }
+
+        fun<T> d(myClass:  Class<T>, msg: String) {
             Log.d(TAG_NAME, "${myClass.simpleName} : $msg")
         }
 
