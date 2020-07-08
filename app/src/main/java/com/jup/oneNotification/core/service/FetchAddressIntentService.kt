@@ -31,6 +31,9 @@ class FetchAddressIntentService : IntentService("Myservice") {
         // Get the location passed to this service through an extra.
         val location = intent.getParcelableExtra<Location>(Constants.LOCATION_DATA_EXTRA)
 
+        if(location==null) {
+            return
+        }
         var addresses: List<Address> = emptyList()
 
         try {

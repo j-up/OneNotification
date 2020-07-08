@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import com.jup.oneNotification.R
 import com.jup.oneNotification.core.provider.AddressProvider
 import com.jup.oneNotification.databinding.ActivityMainBinding
-import com.jup.oneNotification.model.KeyData
+import com.jup.oneNotification.core.common.KeyData
 import com.jup.oneNotification.utils.JLog
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import com.jup.oneNotification.viewModel.MainViewModel

@@ -4,7 +4,7 @@ import android.app.TimePickerDialog
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.jup.oneNotification.model.KeyData
+import com.jup.oneNotification.core.common.KeyData
 import java.util.*
 
 class TimePickerFragment : DialogFragment() {
