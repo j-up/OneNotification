@@ -12,9 +12,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jup.oneNotification.R
-import com.jup.oneNotification.core.provider.AddressProvider
+import com.jup.oneNotification.core.common.KeyData
+import com.jup.oneNotification.core.provider.LocationProvider
+import com.jup.oneNotification.core.service.LocationWorker
 import com.jup.oneNotification.model.AlarmDate
-import com.jup.oneNotification.model.KeyData
+import com.jup.oneNotification.model.LocationModel
 import com.jup.oneNotification.utils.JLog
 import com.jup.oneNotification.utils.RequestPermission
 import com.jup.oneNotification.view.dialog.TimePickerFragment
@@ -22,9 +24,9 @@ import java.util.*
 
 
 class MainViewModel(private val timePickerDialog: TimePickerFragment
-                    , private val sharedPreferences: SharedPreferences
-                    , private val addressProvider: AddressProvider
-                    , private val requestPermission: RequestPermission): ViewModel() {
+                    ,private val sharedPreferences: SharedPreferences
+                    ,private val locationProvider: LocationProvider
+                    ,private val requestPermission: RequestPermission): ViewModel() {
     private val cal = Calendar.getInstance()
     private val _timeSetComplete = MutableLiveData<AlarmDate>()
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
@@ -77,7 +79,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         }
 
         JLog.d(this::class.java,"onTileClick")
-         timePickerDialog.listener = timeSetListener
+        timePickerDialog.listener = timeSetListener
 
         _onTimeClickListener.value = timePickerDialog
     }
@@ -90,18 +92,24 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         }
 
         with(sharedPreferences.edit()) {
-            putInt(KeyData.KEY_WEATHER, checkValue).apply()
+            putInt(KeyData.KEY_WEATHER, checkValue).commit()
         }
     }
 
     fun onLocationClick() {
         val notPermissionList = requestPermission.checkPermissions(permissions)
+        JLog.d(this::class.java, notPermissionList.toString())
+        var locationModel:LocationModel? = null
+
         when(notPermissionList.size) {
-            0 -> addressProvider.startIntentService()
+            0 -> locationModel = locationProvider.onLocation()
             else -> _permissionCheck.value = notPermissionList
         }
 
-        //addressProvider.startIntentService()
+        when(locationModel?.locationConst) {
+            LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> JLog.d(this::class.java,"test ${locationModel.addressList.toString()}")
+            else -> JLog.e(this::class.java, "error")
+        }
     }
 
     fun onNewsClick(view: View) {
@@ -143,8 +151,8 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         AlarmDate(
             sharedPreferences.getInt(KeyData.KEY_TIME_HOUR, 0),
             sharedPreferences.getInt(KeyData.KEY_TIME_MINUTE, 0)
-        ).run {
-            _timeSetComplete.value = this
+        ).let {
+            _timeSetComplete.value = it
         }
     }
 

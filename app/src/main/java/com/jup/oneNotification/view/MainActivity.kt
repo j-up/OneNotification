@@ -1,7 +1,5 @@
 package com.jup.oneNotification.view
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -14,9 +12,9 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.jup.oneNotification.R
-import com.jup.oneNotification.core.provider.AddressProvider
+import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.databinding.ActivityMainBinding
-import com.jup.oneNotification.model.KeyData
+import com.jup.oneNotification.core.common.KeyData
 import com.jup.oneNotification.utils.RequestPermission
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import com.jup.oneNotification.viewModel.MainViewModel
@@ -29,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private val timePickerFragment: TimePickerFragment by inject()
     private val sharedPreferences: SharedPreferences by inject()
-    private val addressProvider: AddressProvider by inject{ parametersOf(applicationContext) }
+    private val locationProvider: LocationProvider by inject()
     private val requestPermission: RequestPermission by inject{ parametersOf(applicationContext)  }
 
     private lateinit var mainViewModel: MainViewModel
@@ -39,7 +37,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
-        mainViewModel = MainViewModel(timePickerFragment,sharedPreferences,addressProvider,requestPermission)
+        mainViewModel = MainViewModel(timePickerFragment,sharedPreferences,locationProvider,requestPermission)
+
         mainViewModel.onTimeClickListener.observe(this, Observer {
             it.show(supportFragmentManager,"TIME_PICKER")
         })
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainViewModel.permissionCheck.observe(this, Observer {
-            requestPermissionArray = it.toArray() as Array<String>
+            requestPermissionArray = it.toTypedArray()
             ActivityCompat.requestPermissions(this, requestPermissionArray, PERMISSION_REQUEST_CODE)
         })
 
