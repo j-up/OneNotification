@@ -107,7 +107,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         }
 
         when(locationModel?.locationConst) {
-            LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> JLog.d(this::class.java,"test ${locationModel.addressList.toString()}")
+            LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> ""
             else -> JLog.e(this::class.java, "error")
         }
     }
