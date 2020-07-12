@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -72,6 +73,10 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.fashionSetComplete.observe(this, Observer {
             fashion_switch.isChecked = it
+        })
+
+        mainViewModel.locationSetComplete.observe(this, Observer {
+            Toast.makeText(applicationContext,it.addressList[0].adminArea,Toast.LENGTH_SHORT).show()
         })
 
         binding.mainViewModel=mainViewModel

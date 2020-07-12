@@ -31,7 +31,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     private val _timeSetComplete = MutableLiveData<AlarmDate>()
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
     private val _weatherSetComplete = MutableLiveData<Int>()
-    private val _locationSetComplete = MutableLiveData<String>()
+    private val _locationSetComplete = MutableLiveData<LocationModel>()
     private val _newsSetComplete = MutableLiveData<ArrayList<String>>()
     private val _fashionSetComplete = MutableLiveData<Boolean>()
     private val _permissionCheck = MutableLiveData<ArrayList<String>>()
@@ -39,7 +39,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     val timeSetComplete: LiveData<AlarmDate> get () = _timeSetComplete
     val onTimeClickListener: LiveData<TimePickerFragment>  get () = _onTimeClickListener
     val weatherSetComplete: LiveData<Int> get () = _weatherSetComplete
-    val locationSetComplete: LiveData<String> get () = _locationSetComplete
+    val locationSetComplete: LiveData<LocationModel> get () = _locationSetComplete
     val newsSetComplete: LiveData<ArrayList<String>> get () =_newsSetComplete
     val fashionSetComplete: LiveData<Boolean> get () = _fashionSetComplete
     val permissionCheck: LiveData<ArrayList<String>> get () = _permissionCheck
@@ -107,7 +107,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         }
 
         when(locationModel?.locationConst) {
-            LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> ""
+            LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> _locationSetComplete.value = locationModel
             else -> JLog.e(this::class.java, "error")
         }
     }
