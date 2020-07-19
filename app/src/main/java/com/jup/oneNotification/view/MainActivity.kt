@@ -3,6 +3,7 @@ package com.jup.oneNotification.view
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -76,7 +77,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainViewModel.locationSetComplete.observe(this, Observer {
-            Toast.makeText(applicationContext,it.addressList[0].adminArea,Toast.LENGTH_SHORT).show()
+            //Toast.makeText(applicationContext,"위치 저장에 성공했습니다.",Toast.LENGTH_SHORT).show()
+            location_init_ly.setBackgroundColor(Color.parseColor("#1DDB16"))
+            val addressList = it.addressList[0]
+            val address = "${addressList.adminArea} ${addressList.locality} ${addressList.thoroughfare}"
+            address_text_view.text = address
         })
 
         binding.mainViewModel=mainViewModel
@@ -110,22 +115,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        /*var checkResult = true;
-        //super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode==permissionRequestCode && grantResults.size == requestPermissionArray.size) {
-            for(item in grantResults) {
-                if(item != PackageManager.PERMISSION_GRANTED) {
-                    checkResult = false;
-                    break;
-                }
-            }
-
-            if(!checkResult) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, requestPermissionArray[0])) {
-
-                }
-            }
-        }*/
     }
 
     private fun showDialogToGetPermission() {
@@ -134,13 +123,13 @@ class MainActivity : AppCompatActivity() {
             .setMessage("We need the location permission for some reason. " +
                     "You need to move on Settings to grant some permissions")
 
-        builder.setPositiveButton("OK") { dialogInterface, i ->
+        builder.setPositiveButton("OK") { _, _ ->
             val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.fromParts("package", packageName, null))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)   // 6
+            startActivity(intent)
         }
-        builder.setNegativeButton("Later") { dialogInterface, i ->
+        builder.setNegativeButton("Later") { _, _ ->
 
         }
         val dialog = builder.create()

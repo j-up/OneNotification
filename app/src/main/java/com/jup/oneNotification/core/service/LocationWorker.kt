@@ -16,8 +16,8 @@ import java.util.*
 class LocationWorker(private val context:Context) {
     private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     private val geocoder: Geocoder = Geocoder(context, Locale.getDefault())
-    var addresses: List<Address> = emptyList()
-    var location: Location? = null
+    private var addressList: List<Address> = emptyList()
+    private var location: Location? = null
 
     object LocationConst {
         const val NOT_PERMISSION = 483
@@ -34,17 +34,17 @@ class LocationWorker(private val context:Context) {
             return LocationModel(emptyList(),checkResult)
 
         try {
-            addresses = geocoder.getFromLocation(
+            addressList = geocoder.getFromLocation(
                 location!!.latitude,
                 location!!.longitude,
                 1)
-            JLog.d(this::class.java,addresses.toString())
+            JLog.d(this::class.java,addressList.toString())
         } catch (e: Exception) {
             JLog.e(this::class.java,e.message!!)
             return LocationModel(emptyList(),LocationConst.FAIL_GET_LOCATION)
         }
 
-        return LocationModel(addresses,LocationConst.SUCCESS_GET_LOCATION)
+        return LocationModel(addressList,LocationConst.SUCCESS_GET_LOCATION)
     }
 
     private fun initCheck(): Int {

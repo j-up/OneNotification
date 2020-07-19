@@ -12,4 +12,6 @@ object KeyData {
     const val KEY_NEWS_KHAN = "KEY_NEWS_KHAN"
 
     const val KEY_FASHION = "KEY_FASHION"
+
+    const val KEY_LOCATION = "KEY_LOCATION"
 }

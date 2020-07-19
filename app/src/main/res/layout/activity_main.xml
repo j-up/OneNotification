@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="mainViewModel"
             type="com.jup.oneNotification.viewModel.MainViewModel" />
@@ -19,98 +20,112 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#808080"
-            android:orientation="vertical"
-            android:onClick="@{() -> mainViewModel.onTimeClick()}"
             android:clickable="true"
+            android:onClick="@{() -> mainViewModel.onTimeClick()}"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="false"
                 android:text="@string/alarm_time_setting_korean"
                 android:textSize="20dp"
-                android:clickable="false"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/time_setting_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00시 00분"
                 android:clickable="false"
+                android:text="00시 00분"
                 android:textSize="20dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/location_init_ly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFF"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/weather_setting_korean"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:id="@+id/weather_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onCheckedChanged="@{mainViewModel.onWeatherClick}">
-
-                    <RadioButton
-                        android:id="@+id/open_weather_radio_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="OpenWeather" />
-
-                    <RadioButton
-                        android:id="@+id/korea_weather_radio_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="기상청" />
-                </RadioGroup>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/basic_stroke"
-                android:orientation="vertical"
+                android:background="#FF0000"
                 android:gravity="center"
                 android:onClick="@{() -> mainViewModel.onLocationClick()}"
-                android:layout_weight="0.2">
-
+                android:orientation="vertical">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="fitCenter"
+                    android:background="@drawable/gps_icon"
                     android:focusable="false"
-                    android:background="@drawable/gps_icon"/>
+                    android:scaleType="fitCenter" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:text="지역 등록"/>
+                    android:text="위치갱신"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold"/>
             </LinearLayout>
-        </LinearLayout>
 
+            <TextView
+                android:id="@+id/address_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="My Address"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#808080"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weather_setting_korean"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/weather_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{mainViewModel.onWeatherClick}">
+
+                <RadioButton
+                    android:id="@+id/open_weather_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OpenWeather" />
+
+                <RadioButton
+                    android:id="@+id/korea_weather_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="기상청" />
+            </RadioGroup>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -139,22 +154,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
+            android:background="#808080"
             android:orientation="horizontal"
             android:padding="10dp">
 
             <Switch
                 android:id="@+id/fashion_switch"
                 android:layout_width="wrap_content"
-                android:onCheckedChanged="@{mainViewModel.onFashionClick}"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{mainViewModel.onFashionClick}" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:text="@string/fashion_setting_korean"
                 android:textSize="20dp"
-                android:textStyle="bold"
-                android:text="@string/fashion_setting_korean"/>
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 

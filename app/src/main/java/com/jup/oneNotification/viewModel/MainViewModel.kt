@@ -11,6 +11,7 @@ import android.widget.RadioGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.jup.oneNotification.R
 import com.jup.oneNotification.core.common.KeyData
 import com.jup.oneNotification.core.provider.LocationProvider
@@ -107,7 +108,12 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         }
 
         when(locationModel?.locationConst) {
-            LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> _locationSetComplete.value = locationModel
+            LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> {
+                with(sharedPreferences.edit()) {
+                    putString(KeyData.KEY_LOCATION, Gson().toJson(locationModel))
+                }
+                _locationSetComplete.value = locationModel
+            }
             else -> JLog.e(this::class.java, "error")
         }
     }
