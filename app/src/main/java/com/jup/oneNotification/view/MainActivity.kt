@@ -77,11 +77,9 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainViewModel.locationSetComplete.observe(this, Observer {
-            //Toast.makeText(applicationContext,"위치 저장에 성공했습니다.",Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext,"현재 설정된 위치 '$it'",Toast.LENGTH_SHORT).show()
             location_init_ly.setBackgroundColor(Color.parseColor("#1DDB16"))
-            val addressList = it.addressList[0]
-            val address = "${addressList.adminArea} ${addressList.locality} ${addressList.thoroughfare}"
-            address_text_view.text = address
+            address_text_view.text = it
         })
 
         binding.mainViewModel=mainViewModel

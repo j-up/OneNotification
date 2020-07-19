@@ -28,10 +28,10 @@ class LocationWorker(private val context:Context) {
     }
 
     fun getLocation(): LocationModel {
-        val checkResult = initCheck()
+        val checkStatus = initCheck()
 
-        if(checkResult!=LocationConst.SUCCESS_INIT_CHECK)
-            return LocationModel(emptyList(),checkResult)
+        if(checkStatus!=LocationConst.SUCCESS_INIT_CHECK)
+            return LocationModel(null,checkStatus)
 
         try {
             addressList = geocoder.getFromLocation(
@@ -41,10 +41,10 @@ class LocationWorker(private val context:Context) {
             JLog.d(this::class.java,addressList.toString())
         } catch (e: Exception) {
             JLog.e(this::class.java,e.message!!)
-            return LocationModel(emptyList(),LocationConst.FAIL_GET_LOCATION)
+            return LocationModel(null,LocationConst.FAIL_GET_LOCATION)
         }
 
-        return LocationModel(addressList,LocationConst.SUCCESS_GET_LOCATION)
+        return LocationModel(addressList[0],LocationConst.SUCCESS_GET_LOCATION)
     }
 
     private fun initCheck(): Int {

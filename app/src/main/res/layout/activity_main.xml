@@ -156,6 +156,7 @@
             android:layout_height="wrap_content"
             android:background="#808080"
             android:orientation="horizontal"
+            android:visibility="invisible"
             android:padding="10dp">
 
             <Switch

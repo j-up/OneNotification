@@ -11,7 +11,6 @@ import android.widget.RadioGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
 import com.jup.oneNotification.R
 import com.jup.oneNotification.core.common.KeyData
 import com.jup.oneNotification.core.provider.LocationProvider
@@ -32,7 +31,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     private val _timeSetComplete = MutableLiveData<AlarmDate>()
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
     private val _weatherSetComplete = MutableLiveData<Int>()
-    private val _locationSetComplete = MutableLiveData<LocationModel>()
+    private val _locationSetComplete = MutableLiveData<String>()
     private val _newsSetComplete = MutableLiveData<ArrayList<String>>()
     private val _fashionSetComplete = MutableLiveData<Boolean>()
     private val _permissionCheck = MutableLiveData<ArrayList<String>>()
@@ -40,7 +39,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     val timeSetComplete: LiveData<AlarmDate> get () = _timeSetComplete
     val onTimeClickListener: LiveData<TimePickerFragment>  get () = _onTimeClickListener
     val weatherSetComplete: LiveData<Int> get () = _weatherSetComplete
-    val locationSetComplete: LiveData<LocationModel> get () = _locationSetComplete
+    val locationSetComplete: LiveData<String> get () = _locationSetComplete
     val newsSetComplete: LiveData<ArrayList<String>> get () =_newsSetComplete
     val fashionSetComplete: LiveData<Boolean> get () = _fashionSetComplete
     val permissionCheck: LiveData<ArrayList<String>> get () = _permissionCheck
@@ -68,6 +67,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         initWeather()
         initNews()
         initFashion()
+        initLocation()
     }
 
     fun onTimeClick() {
@@ -109,12 +109,16 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
 
         when(locationModel?.locationConst) {
             LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> {
-                with(sharedPreferences.edit()) {
-                    putString(KeyData.KEY_LOCATION, Gson().toJson(locationModel))
+                val address = locationModel.address?.let {
+                    "${it.adminArea} ${it.locality} ${it.thoroughfare}"
                 }
-                _locationSetComplete.value = locationModel
+
+                with(sharedPreferences.edit()) {
+                    putString(KeyData.KEY_LOCATION,address).commit()
+                }
+                _locationSetComplete.value = address
             }
-            else -> JLog.e(this::class.java, "error")
+            else -> JLog.e(this::class.java, "getLocation is error")
         }
     }
 
@@ -193,6 +197,16 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     private fun initFashion() {
         val value = sharedPreferences.getBoolean(KeyData.KEY_FASHION,false)
         if(value) _fashionSetComplete.value = value
+    }
+
+    private fun initLocation() {
+        val address = sharedPreferences.getString(KeyData.KEY_LOCATION,"")
+        JLog.d(this::class.java,"address = $address")
+        address?.let {
+            if(it.isNotEmpty()) {
+                _locationSetComplete.value = it
+            }
+        }
     }
 }
 
