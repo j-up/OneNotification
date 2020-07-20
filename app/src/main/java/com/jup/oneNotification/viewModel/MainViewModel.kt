@@ -35,14 +35,16 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     private val _newsSetComplete = MutableLiveData<ArrayList<String>>()
     private val _fashionSetComplete = MutableLiveData<Boolean>()
     private val _permissionCheck = MutableLiveData<ArrayList<String>>()
+    private val _onError = MutableLiveData<String>()
 
-    val timeSetComplete: LiveData<AlarmDate> get () = _timeSetComplete
-    val onTimeClickListener: LiveData<TimePickerFragment>  get () = _onTimeClickListener
-    val weatherSetComplete: LiveData<Int> get () = _weatherSetComplete
-    val locationSetComplete: LiveData<String> get () = _locationSetComplete
-    val newsSetComplete: LiveData<ArrayList<String>> get () =_newsSetComplete
-    val fashionSetComplete: LiveData<Boolean> get () = _fashionSetComplete
-    val permissionCheck: LiveData<ArrayList<String>> get () = _permissionCheck
+    val timeSetComplete: LiveData<AlarmDate> = _timeSetComplete
+    val onTimeClickListener: LiveData<TimePickerFragment> = _onTimeClickListener
+    val weatherSetComplete: LiveData<Int> = _weatherSetComplete
+    val locationSetComplete: LiveData<String>  = _locationSetComplete
+    val newsSetComplete: LiveData<ArrayList<String>> =_newsSetComplete
+    val fashionSetComplete: LiveData<Boolean> = _fashionSetComplete
+    val permissionCheck: LiveData<ArrayList<String>> = _permissionCheck
+    val onError: MutableLiveData<String> = _onError
 
     private val MIN_CLICK_INTERVAL: Long = 600
     private var mLastClickTime: Long = 0
@@ -118,7 +120,10 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
                 }
                 _locationSetComplete.value = address
             }
-            else -> JLog.e(this::class.java, "getLocation is error")
+            else -> {
+                JLog.e(this::class.java, "getLocation is error")
+                _onError.value = "위치 획득에 실패하였습니다."
+            }
         }
     }
 

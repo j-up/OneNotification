@@ -81,6 +81,10 @@ class MainActivity : AppCompatActivity() {
             location_init_ly.setBackgroundColor(Color.parseColor("#1DDB16"))
             address_text_view.text = it
         })
+        
+        mainViewModel.onError.observe(this, Observer {
+            Toast.makeText(applicationContext, it,Toast.LENGTH_SHORT).show()
+        })
 
         binding.mainViewModel=mainViewModel
         binding.lifecycleOwner=this@MainActivity
