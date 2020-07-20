@@ -121,17 +121,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDialogToGetPermission() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Permisisons request")
-            .setMessage("We need the location permission for some reason. " +
-                    "You need to move on Settings to grant some permissions")
-
-        builder.setPositiveButton("OK") { _, _ ->
+            .setTitle("Permisisons request")
+            .setMessage("앱 사용을 위해선 위치 승인이 필요합니다. 설정으로 이동하시겠습니까?")
+            .setPositiveButton("이동") { _, _ ->
             val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.fromParts("package", packageName, null))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-        }
-        builder.setNegativeButton("Later") { _, _ ->
+            }
+            .setNegativeButton("나중에") { _, _ ->
 
         }
         val dialog = builder.create()
