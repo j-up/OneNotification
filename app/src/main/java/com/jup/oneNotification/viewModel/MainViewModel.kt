@@ -106,14 +106,21 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
 
         when(notPermissionList.size) {
             0 -> locationModel = locationProvider.onLocation()
-            else -> _permissionCheck.value = notPermissionList
+            else -> {
+                _permissionCheck.value = notPermissionList
+                return
+            }
         }
 
         when(locationModel?.locationConst) {
             LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> {
-                val address = locationModel.address?.let {
-                    "${it.adminArea} ${it.locality} ${it.thoroughfare}"
-                }
+                var addressList = listOf(
+                    locationModel.address?.adminArea
+                    ,locationModel.address?.locality
+                    ,locationModel.address?.thoroughfare)
+
+                var address = addressList.filterNotNull()
+                    .joinToString(" ")
 
                 with(sharedPreferences.edit()) {
                     putString(KeyData.KEY_LOCATION,address).commit()

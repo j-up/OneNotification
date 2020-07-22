@@ -19,8 +19,8 @@ val appModule = module{
 
     single { RequestPermission(it[0])}
 
-    single { LocationWorker(androidApplication()) }
     single { LocationProvider(get()) }
+    single { LocationWorker(androidApplication()) }
 }
 
 private fun provideSettingsPreferences(app: Application): SharedPreferences =
