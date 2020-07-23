@@ -1,3 +1,11 @@
 # OneNotification
+## 소개
+원하는 시간에 단 하나의 알림으로 날씨 및 기사정보를 알려주는 앱
 
-readme
+## Stack
+Kotlin<br>
+MVVM<br>
+Repository<br>
+Coroutines<br>
+TDD<br>
+Koin<br>
