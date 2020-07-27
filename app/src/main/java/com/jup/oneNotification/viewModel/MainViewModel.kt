@@ -18,7 +18,7 @@ import com.jup.oneNotification.core.service.LocationWorker
 import com.jup.oneNotification.model.AlarmDate
 import com.jup.oneNotification.model.LocationModel
 import com.jup.oneNotification.utils.JLog
-import com.jup.oneNotification.utils.RequestPermission
+import com.jup.oneNotification.utils.PermissionUtil
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import java.util.*
 
@@ -26,7 +26,7 @@ import java.util.*
 class MainViewModel(private val timePickerDialog: TimePickerFragment
                     ,private val sharedPreferences: SharedPreferences
                     ,private val locationProvider: LocationProvider
-                    ,private val requestPermission: RequestPermission): ViewModel() {
+                    ,private val permissionUtil: PermissionUtil): ViewModel() {
     private val cal = Calendar.getInstance()
     private val _timeSetComplete = MutableLiveData<AlarmDate>()
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
@@ -98,7 +98,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     }
 
     fun onLocationClick() {
-        val notPermissionList = requestPermission.checkPermissions(permissions)
+        val notPermissionList = permissionUtil.checkPermissions(permissions)
         JLog.d(this::class.java, notPermissionList.toString())
         var locationModel:LocationModel? = null
 

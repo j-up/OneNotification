@@ -17,7 +17,7 @@ import com.jup.oneNotification.R
 import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.databinding.ActivityMainBinding
 import com.jup.oneNotification.core.common.KeyData
-import com.jup.oneNotification.utils.RequestPermission
+import com.jup.oneNotification.utils.PermissionUtil
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import com.jup.oneNotification.viewModel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val timePickerFragment: TimePickerFragment by inject()
     private val sharedPreferences: SharedPreferences by inject()
     private val locationProvider: LocationProvider by inject()
-    private val requestPermission: RequestPermission by inject{ parametersOf(applicationContext)  }
+    private val permissionUtil: PermissionUtil by inject{ parametersOf(applicationContext)  }
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var requestPermissionArray: Array<String>
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
-        mainViewModel = MainViewModel(timePickerFragment,sharedPreferences,locationProvider,requestPermission)
+        mainViewModel = MainViewModel(timePickerFragment,sharedPreferences,locationProvider,permissionUtil)
 
         mainViewModel.onTimeClickListener.observe(this, Observer {
             it.show(supportFragmentManager,"TIME_PICKER")
