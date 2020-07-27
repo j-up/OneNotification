@@ -115,6 +115,8 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
 
                 with(sharedPreferences.edit()) {
                     putString(KeyData.KEY_LOCATION,address).commit()
+                    putString(KeyData.KEY_LOCATION_LAT,locationModel.address?.latitude.toString())
+                    putString(KeyData.KEY_LOCATION_LON,locationModel.address?.longitude.toString())
                 }
                 _locationSetComplete.value = address
             }
