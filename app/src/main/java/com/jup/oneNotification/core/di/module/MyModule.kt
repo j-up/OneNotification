@@ -22,9 +22,12 @@ val appModule = module{
 
     single { PermissionUtil(it[0])}
 
-    single { LocationWorker(androidApplication()) }
     single { LocationProvider(get()) }
+<<<<<<< HEAD
     single { createOpenWeather() }
+=======
+    single { LocationWorker(androidApplication()) }
+>>>>>>> c04cb284af774695338aaa2e0aadcfbfaf710fab
 }
 
 private fun provideSettingsPreferences(app: Application): SharedPreferences =

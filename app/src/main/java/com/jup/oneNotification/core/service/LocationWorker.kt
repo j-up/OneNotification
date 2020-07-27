@@ -43,6 +43,8 @@ class LocationWorker(private val context:Context) {
             JLog.e(this::class.java,e.message!!)
             return LocationModel(null,LocationConst.FAIL_GET_LOCATION)
         }
+        if(addressList.isEmpty())
+            return LocationModel(null,LocationConst.FAIL_GET_LOCATION)
 
         return LocationModel(addressList[0],LocationConst.SUCCESS_GET_LOCATION)
     }
