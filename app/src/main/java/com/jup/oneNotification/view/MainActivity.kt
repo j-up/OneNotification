@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDialogToGetPermission() {
         val builder = AlertDialog.Builder(this)
-            .setTitle("Permisisons request")
+            .setTitle("권한 요청")
             .setMessage("앱 사용을 위해선 위치 승인이 필요합니다. 설정으로 이동하시겠습니까?")
             .setPositiveButton("이동") { _, _ ->
             val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             }
             .setNegativeButton("나중에") { _, _ ->
-
+            return@setNegativeButton
         }
         val dialog = builder.create()
         dialog.show()

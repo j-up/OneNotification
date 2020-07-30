@@ -23,8 +23,6 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.jup.oneNotification.core.service.FetchAddressIntentService"
-            android:exported="false"/>
     </application>
 
 </manifest>

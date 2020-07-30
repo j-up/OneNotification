@@ -15,6 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 private const val PREFERENCES_FILE_KEY = "com.jup.onenotification"
 private const val OPENWEATHER_BASE_URL = "http://api.openweathermap.org/"
+
 val appModule = module{
     single { provideSettingsPreferences(androidApplication()) }
 
@@ -23,11 +24,8 @@ val appModule = module{
     single { PermissionUtil(it[0])}
 
     single { LocationProvider(get()) }
-<<<<<<< HEAD
     single { createOpenWeather() }
-=======
     single { LocationWorker(androidApplication()) }
->>>>>>> c04cb284af774695338aaa2e0aadcfbfaf710fab
 }
 
 private fun provideSettingsPreferences(app: Application): SharedPreferences =
