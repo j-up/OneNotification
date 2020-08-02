@@ -3,15 +3,13 @@ package com.jup.oneNotification.core.service
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationManager
+import android.location.*
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.LocationServices
 import com.jup.oneNotification.model.LocationModel
 import com.jup.oneNotification.utils.JLog
-import java.lang.Exception
 import java.util.*
+
 
 class LocationWorker(private val context:Context) {
     private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -23,13 +21,14 @@ class LocationWorker(private val context:Context) {
         const val NOT_PERMISSION = 483
         const val FAIL_GET_LOCATION = 484
         const val DISABLE_NETWORK_PROVIDER = 485
+        const val DISABLE_GPS_PROVIDER = 486
+
         const val SUCCESS_INIT_CHECK = 233
         const val SUCCESS_GET_LOCATION = 234
     }
 
     fun getLocation(): LocationModel {
         val checkStatus = initCheck()
-
         if(checkStatus!=LocationConst.SUCCESS_INIT_CHECK)
             return LocationModel(null,checkStatus)
 
@@ -51,16 +50,20 @@ class LocationWorker(private val context:Context) {
 
     private fun initCheck(): Int {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
+            && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return LocationConst.NOT_PERMISSION
         }
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            return LocationConst.DISABLE_GPS_PROVIDER
 
         if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
             return LocationConst.DISABLE_NETWORK_PROVIDER
 
-        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-            ?: return LocationConst.FAIL_GET_LOCATION
+         if(location==null) {
+             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                 ?:return LocationConst.FAIL_GET_LOCATION
+         }
 
         return LocationConst.SUCCESS_INIT_CHECK
     }

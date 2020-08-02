@@ -129,6 +129,16 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
                 }
                 _locationSetComplete.value = address
             }
+
+            LocationWorker.LocationConst.DISABLE_NETWORK_PROVIDER -> {
+                JLog.e(this::class.java, "Network is disable")
+                _onError.value = "네트워크가 정상적으로 연결되어있는지 확인해주세요."
+            }
+
+            LocationWorker.LocationConst.DISABLE_GPS_PROVIDER -> {
+                JLog.e(this::class.java, "GPS is disable")
+                _onError.value = "GPS가 정상적으로 켜져있는지 확인해주세요."
+            }
             else -> {
                 JLog.e(this::class.java, "getLocation is error")
                 _onError.value = "위치 획득에 실패하였습니다."
