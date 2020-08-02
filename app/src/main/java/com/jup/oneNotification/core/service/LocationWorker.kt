@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.*
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.LocationServices
 import com.jup.oneNotification.model.LocationModel
 import com.jup.oneNotification.utils.JLog
 import java.util.*
