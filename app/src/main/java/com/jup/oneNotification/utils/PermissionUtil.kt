@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 
-class RequestPermission(private val context: Context) {
+class PermissionUtil(private val context: Context) {
 
     fun checkPermissions(requiredPermissions:ArrayList<String>):ArrayList<String> {
         var rejectedPermissionList = ArrayList<String>()

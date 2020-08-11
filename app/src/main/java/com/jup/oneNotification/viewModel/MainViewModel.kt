@@ -22,7 +22,7 @@ import com.jup.oneNotification.model.LocationModel
 import com.jup.oneNotification.core.common.KeyData
 >>>>>>> c7094647381583b99a2bdf3718aa68abce978301
 import com.jup.oneNotification.utils.JLog
-import com.jup.oneNotification.utils.RequestPermission
+import com.jup.oneNotification.utils.PermissionUtil
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import java.util.*
 
@@ -30,7 +30,7 @@ import java.util.*
 class MainViewModel(private val timePickerDialog: TimePickerFragment
                     ,private val sharedPreferences: SharedPreferences
                     ,private val locationProvider: LocationProvider
-                    ,private val requestPermission: RequestPermission): ViewModel() {
+                    ,private val permissionUtil: PermissionUtil): ViewModel() {
     private val cal = Calendar.getInstance()
     private val _timeSetComplete = MutableLiveData<AlarmDate>()
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
@@ -39,14 +39,16 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     private val _newsSetComplete = MutableLiveData<ArrayList<String>>()
     private val _fashionSetComplete = MutableLiveData<Boolean>()
     private val _permissionCheck = MutableLiveData<ArrayList<String>>()
+    private val _onError = MutableLiveData<String>()
 
-    val timeSetComplete: LiveData<AlarmDate> get () = _timeSetComplete
-    val onTimeClickListener: LiveData<TimePickerFragment>  get () = _onTimeClickListener
-    val weatherSetComplete: LiveData<Int> get () = _weatherSetComplete
-    val locationSetComplete: LiveData<String> get () = _locationSetComplete
-    val newsSetComplete: LiveData<ArrayList<String>> get () =_newsSetComplete
-    val fashionSetComplete: LiveData<Boolean> get () = _fashionSetComplete
-    val permissionCheck: LiveData<ArrayList<String>> get () = _permissionCheck
+    val timeSetComplete: LiveData<AlarmDate> = _timeSetComplete
+    val onTimeClickListener: LiveData<TimePickerFragment> = _onTimeClickListener
+    val weatherSetComplete: LiveData<Int> = _weatherSetComplete
+    val locationSetComplete: LiveData<String>  = _locationSetComplete
+    val newsSetComplete: LiveData<ArrayList<String>> =_newsSetComplete
+    val fashionSetComplete: LiveData<Boolean> = _fashionSetComplete
+    val permissionCheck: LiveData<ArrayList<String>> = _permissionCheck
+    val onError: MutableLiveData<String> = _onError
 
     private val MIN_CLICK_INTERVAL: Long = 600
     private var mLastClickTime: Long = 0
@@ -71,6 +73,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         initWeather()
         initNews()
         initFashion()
+        initLocation()
     }
 
     fun onTimeClick() {
@@ -101,18 +104,39 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     }
 
     fun onLocationClick() {
-        val notPermissionList = requestPermission.checkPermissions(permissions)
+        val notPermissionList = permissionUtil.checkPermissions(permissions)
         JLog.d(this::class.java, notPermissionList.toString())
         var locationModel:LocationModel? = null
 
         when(notPermissionList.size) {
             0 -> locationModel = locationProvider.onLocation()
-            else -> _permissionCheck.value = notPermissionList
+            else -> {
+                _permissionCheck.value = notPermissionList
+                return
+            }
         }
 
         when(locationModel?.locationConst) {
-            LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> ""
-            else -> JLog.e(this::class.java, "error")
+            LocationWorker.LocationConst.SUCCESS_GET_LOCATION -> {
+                var addressList = listOf(
+                    locationModel.address?.adminArea
+                    ,locationModel.address?.locality
+                    ,locationModel.address?.thoroughfare)
+
+                var address = addressList.filterNotNull()
+                    .joinToString(" ")
+
+                with(sharedPreferences.edit()) {
+                    putString(KeyData.KEY_LOCATION,address).commit()
+                    putString(KeyData.KEY_LOCATION_LAT,locationModel.address?.latitude.toString())
+                    putString(KeyData.KEY_LOCATION_LON,locationModel.address?.longitude.toString())
+                }
+                _locationSetComplete.value = address
+            }
+            else -> {
+                JLog.e(this::class.java, "getLocation is error")
+                _onError.value = "위치 획득에 실패하였습니다."
+            }
         }
     }
 
@@ -191,6 +215,16 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     private fun initFashion() {
         val value = sharedPreferences.getBoolean(KeyData.KEY_FASHION,false)
         if(value) _fashionSetComplete.value = value
+    }
+
+    private fun initLocation() {
+        val address = sharedPreferences.getString(KeyData.KEY_LOCATION,"")
+        JLog.d(this::class.java,"address = $address")
+        address?.let {
+            if(it.isNotEmpty()) {
+                _locationSetComplete.value = it
+            }
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-package com.jup.oneNotification.db.room
+package com.jup.oneNotification.core.db.room
 
 import android.content.Context
 import androidx.room.*
