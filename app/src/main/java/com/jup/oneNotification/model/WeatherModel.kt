@@ -1,31 +1,54 @@
 package com.jup.oneNotification.model
 
-import com.google.gson.annotations.SerializedName
 
-class WeatherResponse {
+data class WeatherResponse(val Current:Current, val daily: Array<Daily>) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-    @SerializedName("sys")
-    var sys: Sys? = null
+        other as WeatherResponse
 
-    @SerializedName("main")
-    var main: Main? = null
+        if (Current != other.Current) return false
+        if (!daily.contentEquals(other.daily)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = Current.hashCode()
+        result = 31 * result + daily.contentHashCode()
+        return result
+    }
 }
 
+data class Current(val dt:Long, val temp:Float, val feels_like:Float, val humidity:Int, val weather:Weather)
+data class Weather(val id:String, val main:String, val description:String, val icon:String)
 
-class Main {
-    @SerializedName("temp")
-    var temp: Float = 0.0f
-    @SerializedName("humidity")
-    var humidity: Float = 0.0f
-    @SerializedName("pressure")
-    var pressure: Float = 0.0f
-    @SerializedName("temp_min")
-    var temp_min: Float = 0.0f
-    @SerializedName("temp_max")
-    var temp_max: Float = 0.0f
+data class Daily(val dt:Long,val temp:Temp,val feels_like:FeelsLike,val humidity:Int, val weather: Array<Weather>) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Daily
+
+        if (dt != other.dt) return false
+        if (temp != other.temp) return false
+        if (feels_like != other.feels_like) return false
+        if (humidity != other.humidity) return false
+        if (!weather.contentEquals(other.weather)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = dt.hashCode()
+        result = 31 * result + temp.hashCode()
+        result = 31 * result + feels_like.hashCode()
+        result = 31 * result + humidity
+        result = 31 * result + weather.contentHashCode()
+        return result
+    }
 }
 
-class Sys {
-    @SerializedName("country")
-    var country: String? = null
-}
+data class Temp(val day:Float, val min:Float, val max:Float)
+data class FeelsLike(val day:Float, val night:Float)
