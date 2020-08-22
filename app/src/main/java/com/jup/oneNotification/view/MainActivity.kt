@@ -61,17 +61,6 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, requestPermissionArray, PERMISSION_REQUEST_CODE)
         })
 
-        mainViewModel.newsSetComplete.observe(this, Observer {
-            val iterator = it.iterator()
-
-            while(iterator.hasNext()) {
-                when(iterator.next()) {
-                    KeyData.KEY_NEWS_CHO -> cho_check_box.isChecked = true
-                    KeyData.KEY_NEWS_KHAN -> khan_check_box.isChecked = true
-                }
-            }
-        })
-
         mainViewModel.fashionSetComplete.observe(this, Observer {
             fashion_switch.isChecked = it
         })

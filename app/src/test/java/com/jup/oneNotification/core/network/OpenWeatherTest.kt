@@ -2,7 +2,6 @@ package com.jup.oneNotification.core.network
 
 import com.jup.oneNotification.BuildConfig
 import com.jup.oneNotification.model.WeatherResponse
-import com.jup.oneNotification.utils.JLog
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -40,11 +39,10 @@ class OpenWeatherTest {
     fun getWeatherTest() {
         CoroutineScope(testDispatcher).launch {
             val weatherResponse = getWeather(retrofit,testDispatcher)
+
             Assert.assertEquals("code:${weatherResponse.code()} message:${weatherResponse.message()}"
                 ,weatherResponse.isSuccessful,true)
 
-
-            JLog.d(this::class.java,weatherResponse.body().toString())
             println(weatherResponse.body().toString())
         }
     }
@@ -53,7 +51,6 @@ class OpenWeatherTest {
     fun getUnixTimeToDateTest() {
         val unixTimeArray = arrayListOf(1597633200,1597806000,1597892400,1597978800,1598065200,1598151600,1598238000)
         unixTimeArray.map {
-            JLog.d(this::class.java,getUnixTimeToDate(it))
             println(getUnixTimeToDate(it))
         }
     }

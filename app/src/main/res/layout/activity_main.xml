@@ -125,35 +125,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/news_setting_korean"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-            <CheckBox
-                android:id="@+id/cho_check_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{mainViewModel.onNewsClick}"
-                android:text="조선일보" />
-
-            <CheckBox
-                android:id="@+id/khan_check_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{mainViewModel.onNewsClick}"
-                android:text="경향신문" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:background="#808080"
             android:orientation="horizontal"
             android:visibility="invisible"

@@ -67,7 +67,6 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     init{
         initTime()
         initWeather()
-        initNews()
         initFashion()
         initLocation()
     }
@@ -146,24 +145,6 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         }
     }
 
-    fun onNewsClick(view: View) {
-        var checked: Boolean = false
-
-        if(view is CheckBox) {
-            checked = view.isChecked
-        }
-
-        when(view.id) {
-            R.id.cho_check_box -> with(sharedPreferences.edit()) {
-                putBoolean(KeyData.KEY_NEWS_CHO, checked).commit()
-            }
-
-            R.id.khan_check_box -> with(sharedPreferences.edit()) {
-                putBoolean(KeyData.KEY_NEWS_KHAN, checked).commit()
-            }
-        }
-    }
-
     fun onFashionClick(view: CompoundButton, isChecked:Boolean) {
         with(sharedPreferences.edit()) {
             putBoolean(KeyData.KEY_FASHION, isChecked).commit()
@@ -204,19 +185,6 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
             _weatherSetComplete.value = weatherValue
     }
 
-
-    private fun initNews() {
-        val valueMap = mutableMapOf<String,Boolean>()
-        valueMap[KeyData.KEY_NEWS_CHO] = sharedPreferences.getBoolean(KeyData.KEY_NEWS_CHO,false)
-        valueMap[KeyData.KEY_NEWS_KHAN] = sharedPreferences.getBoolean(KeyData.KEY_NEWS_KHAN,false)
-
-        val trueList = arrayListOf<String>()
-        valueMap.forEach { (key, value) ->
-            if(value) trueList.add(key)
-        }
-
-        _newsSetComplete.value = trueList
-    }
 
     private fun initFashion() {
         val value = sharedPreferences.getBoolean(KeyData.KEY_FASHION,false)
