@@ -3,7 +3,7 @@ package com.jup.oneNotification.core.di.module
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.jup.oneNotification.core.network.OpenWeather
+import com.jup.oneNotification.core.network.OpenWeatherApi
 import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.core.service.LocationWorker
 import com.jup.oneNotification.utils.PermissionUtil
@@ -31,10 +31,10 @@ val appModule = module{
 private fun provideSettingsPreferences(app: Application): SharedPreferences =
     app.getSharedPreferences(PREFERENCES_FILE_KEY, Context.MODE_PRIVATE)
 
-private fun createOpenWeather(): OpenWeather {
+private fun createOpenWeather(): OpenWeatherApi {
     return Retrofit.Builder()
         .baseUrl(OPENWEATHER_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        .create(OpenWeather::class.java)
+        .create(OpenWeatherApi::class.java)
 }

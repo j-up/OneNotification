@@ -22,17 +22,23 @@ import java.util.*
 class OpenWeatherTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
-    private val retrofit: OpenWeather by lazy {
+    private val retrofit: OpenWeatherApi by lazy {
         Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(OpenWeather::class.java)
+            .create(OpenWeatherApi::class.java)
     }
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
     }
 
     @Test
@@ -55,13 +61,9 @@ class OpenWeatherTest {
         }
     }
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
-    }
 
-    private suspend fun getWeather(retrofit: OpenWeather, defaultDispatcher: CoroutineDispatcher):Response<WeatherResponse> = withContext(defaultDispatcher) {
+
+    private suspend fun getWeather(retrofit: OpenWeatherApi, defaultDispatcher: CoroutineDispatcher):Response<WeatherResponse> = withContext(defaultDispatcher) {
         val weatherResponse = retrofit
             .getCurrentWeatherData("65","135","minutely",BuildConfig.OpenWeatherKey)
             .execute()

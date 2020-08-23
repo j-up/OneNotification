@@ -59,10 +59,10 @@ class LocationWorker(private val context:Context) {
         if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
             return LocationConst.DISABLE_NETWORK_PROVIDER
 
-         if(location==null) {
+        if(location==null) {
              location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                  ?:return LocationConst.FAIL_GET_LOCATION
-         }
+        }
 
         return LocationConst.SUCCESS_INIT_CHECK
     }

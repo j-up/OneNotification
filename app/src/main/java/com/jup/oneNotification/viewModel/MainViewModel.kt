@@ -32,7 +32,6 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
     private val _weatherSetComplete = MutableLiveData<Int>()
     private val _locationSetComplete = MutableLiveData<String>()
-    private val _newsSetComplete = MutableLiveData<ArrayList<String>>()
     private val _fashionSetComplete = MutableLiveData<Boolean>()
     private val _permissionCheck = MutableLiveData<ArrayList<String>>()
     private val _onError = MutableLiveData<String>()
@@ -41,7 +40,6 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     val onTimeClickListener: LiveData<TimePickerFragment> = _onTimeClickListener
     val weatherSetComplete: LiveData<Int> = _weatherSetComplete
     val locationSetComplete: LiveData<String>  = _locationSetComplete
-    val newsSetComplete: LiveData<ArrayList<String>> =_newsSetComplete
     val fashionSetComplete: LiveData<Boolean> = _fashionSetComplete
     val permissionCheck: LiveData<ArrayList<String>> = _permissionCheck
     val onError: MutableLiveData<String> = _onError
