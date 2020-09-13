@@ -17,6 +17,8 @@ import com.jup.oneNotification.R
 import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.databinding.ActivityMainBinding
 import com.jup.oneNotification.core.common.KeyData
+import com.jup.oneNotification.core.network.NewsApi
+import com.jup.oneNotification.core.network.OpenWeatherApi
 import com.jup.oneNotification.utils.PermissionUtil
 import com.jup.oneNotification.view.dialog.TimePickerFragment
 import com.jup.oneNotification.viewModel.MainViewModel
@@ -32,6 +34,9 @@ class MainActivity : AppCompatActivity() {
     private val locationProvider: LocationProvider by inject()
     private val permissionUtil: PermissionUtil by inject{ parametersOf(applicationContext)  }
 
+    private val openWeatherApi: OpenWeatherApi by inject()
+    private val newsApi: NewsApi by inject()
+
     private lateinit var mainViewModel: MainViewModel
     private lateinit var requestPermissionArray: Array<String>
 
@@ -39,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
-        mainViewModel = MainViewModel(timePickerFragment,sharedPreferences,locationProvider,permissionUtil)
+        mainViewModel = MainViewModel(timePickerFragment,sharedPreferences,locationProvider,permissionUtil,openWeatherApi,newsApi)
 
         mainViewModel.onTimeClickListener.observe(this, Observer {
             it.show(supportFragmentManager,"TIME_PICKER")

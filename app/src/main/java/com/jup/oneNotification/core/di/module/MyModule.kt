@@ -3,6 +3,7 @@ package com.jup.oneNotification.core.di.module
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.jup.oneNotification.core.network.NewsApi
 import com.jup.oneNotification.core.network.OpenWeatherApi
 import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.core.service.LocationWorker
@@ -15,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 private const val PREFERENCES_FILE_KEY = "com.jup.onenotification"
 private const val OPENWEATHER_BASE_URL = "http://api.openweathermap.org/"
+private const val NEWS_BASE_URL = "http://newsapi.org/"
 
 val appModule = module{
     single { provideSettingsPreferences(androidApplication()) }
@@ -24,17 +26,26 @@ val appModule = module{
     single { PermissionUtil(it[0])}
 
     single { LocationProvider(get()) }
-    single { createOpenWeather() }
+    single { createOpenWeatherApi() }
+    single { createNewsApi() }
     single { LocationWorker(androidApplication()) }
 }
 
 private fun provideSettingsPreferences(app: Application): SharedPreferences =
     app.getSharedPreferences(PREFERENCES_FILE_KEY, Context.MODE_PRIVATE)
 
-private fun createOpenWeather(): OpenWeatherApi {
+private fun createOpenWeatherApi(): OpenWeatherApi {
     return Retrofit.Builder()
         .baseUrl(OPENWEATHER_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(OpenWeatherApi::class.java)
+}
+
+private fun createNewsApi(): NewsApi {
+    return Retrofit.Builder()
+        .baseUrl(NEWS_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(NewsApi::class.java)
 }

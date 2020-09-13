@@ -170,6 +170,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> mainViewModel.onTestNotiClick()}"
             android:layout_marginTop="5dp"
             android:layout_gravity="center"
             android:text="테스트 알림"/>

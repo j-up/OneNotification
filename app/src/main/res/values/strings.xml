@@ -4,4 +4,6 @@
     <string name="weather_setting_korean">날씨정보 선택</string>
     <string name="news_setting_korean">기사정보 선택</string>
     <string name="fashion_setting_korean">옷정보 받기</string>
+    <string name="noti_enable_korean">알림 활성화</string>
+    <string name="noti_disable_korean">알림 비활성화</string>
 </resources>

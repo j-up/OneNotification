@@ -4,29 +4,39 @@ import android.Manifest
 import android.app.TimePickerDialog
 import android.content.SharedPreferences
 import android.os.SystemClock
-import android.view.View
-import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.RadioGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jup.oneNotification.BuildConfig
 import com.jup.oneNotification.R
 import com.jup.oneNotification.core.common.KeyData
+import com.jup.oneNotification.core.network.NewsApi
+import com.jup.oneNotification.core.network.OpenWeatherApi
 import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.core.service.LocationWorker
 import com.jup.oneNotification.model.AlarmDate
 import com.jup.oneNotification.model.LocationModel
+import com.jup.oneNotification.model.NewsResponse
+import com.jup.oneNotification.model.WeatherResponse
 import com.jup.oneNotification.utils.JLog
 import com.jup.oneNotification.utils.PermissionUtil
 import com.jup.oneNotification.view.dialog.TimePickerFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import retrofit2.Response
 import java.util.*
 
 
 class MainViewModel(private val timePickerDialog: TimePickerFragment
                     ,private val sharedPreferences: SharedPreferences
                     ,private val locationProvider: LocationProvider
-                    ,private val permissionUtil: PermissionUtil): ViewModel() {
+                    ,private val permissionUtil: PermissionUtil
+                    ,private val openWeatherApi: OpenWeatherApi
+                    ,private val newsApi: NewsApi): ViewModel() {
     private val cal = Calendar.getInstance()
     private val _timeSetComplete = MutableLiveData<AlarmDate>()
     private val _onTimeClickListener = MutableLiveData<TimePickerFragment>()
@@ -47,6 +57,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
     private val MIN_CLICK_INTERVAL: Long = 600
     private var mLastClickTime: Long = 0
 
+
     private val permissions = arrayListOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
@@ -61,6 +72,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
             putInt(KeyData.KEY_TIME_MINUTE,minute).commit()
         }
     }
+
 
     init{
         initTime()
@@ -147,6 +159,42 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         with(sharedPreferences.edit()) {
             putBoolean(KeyData.KEY_FASHION, isChecked).commit()
         }
+    }
+
+    fun onTestNotiClick() {
+        CoroutineScope(Dispatchers.Main).launch {
+            var weatherResponse:Response<WeatherResponse>? = null
+            var newsResponse:Response<NewsResponse>? = null
+
+            val weatherJob = async(Dispatchers.IO) {
+                weatherResponse = getWeather()
+            }
+
+            val newsJob = async(Dispatchers.IO) {
+                newsResponse = getNews()
+            }
+            weatherJob.await()
+            newsJob.await()
+
+            JLog.d(this::class.java,"weather isSuccess: ${weatherResponse?.isSuccessful}")
+            JLog.d(this::class.java,"news isSuccess: ${newsResponse?.isSuccessful}")
+
+        }
+    }
+
+    private fun getWeather(): Response<WeatherResponse> {
+        val lat = sharedPreferences.getString(KeyData.KEY_LOCATION_LAT,"0")?: "0"
+        val lon = sharedPreferences.getString(KeyData.KEY_LOCATION_LON,"0")?: "0"
+
+        return openWeatherApi
+            .getCurrentWeatherData(lat, lon, "minutely", BuildConfig.OpenWeatherKey)
+            .execute()
+    }
+
+    private fun getNews(): Response<NewsResponse> {
+        return newsApi
+            .getHeadlineNews("kr",BuildConfig.NewsKey)
+            .execute()
     }
 
     private fun initTime() {
