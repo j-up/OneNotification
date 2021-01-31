@@ -1,7 +1,6 @@
 package com.jup.oneNotification.view
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
@@ -14,40 +13,27 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.jup.oneNotification.R
-import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.databinding.ActivityMainBinding
 import com.jup.oneNotification.core.common.KeyData
-import com.jup.oneNotification.core.network.NewsApi
-import com.jup.oneNotification.core.network.OpenWeatherApi
-import com.jup.oneNotification.utils.PermissionUtil
-import com.jup.oneNotification.view.dialog.TimePickerFragment
 import com.jup.oneNotification.viewModel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private val PERMISSION_REQUEST_CODE = 1001
 
-    private val timePickerFragment: TimePickerFragment by inject()
-    private val sharedPreferences: SharedPreferences by inject()
-    private val locationProvider: LocationProvider by inject()
-    private val permissionUtil: PermissionUtil by inject{ parametersOf(applicationContext)  }
-
-    private val openWeatherApi: OpenWeatherApi by inject()
-    private val newsApi: NewsApi by inject()
-
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel by viewModel<MainViewModel>()
     private lateinit var requestPermissionArray: Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
-        mainViewModel = MainViewModel(timePickerFragment,sharedPreferences,locationProvider,permissionUtil,openWeatherApi,newsApi)
 
         mainViewModel.onTimeClickListener.observe(this, Observer {
-            it.show(supportFragmentManager,"TIME_PICKER")
+            it?.let {
+                it.show(supportFragmentManager,"TIME_PICKER")
+            }
         })
 
         mainViewModel.timeSetComplete.observe(this, Observer {
@@ -71,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainViewModel.locationSetComplete.observe(this, Observer {
-            Toast.makeText(applicationContext,"현재 설정된 위치 '$it'",Toast.LENGTH_SHORT).show()
             location_init_ly.setBackgroundColor(Color.parseColor("#1DDB16"))
             address_text_view.text = it
         })
@@ -89,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         val deniedArrayList = ArrayList<String>()
         when(requestCode) {
             PERMISSION_REQUEST_CODE -> {

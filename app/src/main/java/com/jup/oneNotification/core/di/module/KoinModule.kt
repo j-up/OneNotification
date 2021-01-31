@@ -9,7 +9,9 @@ import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.core.service.LocationWorker
 import com.jup.oneNotification.utils.PermissionUtil
 import com.jup.oneNotification.view.dialog.TimePickerFragment
+import com.jup.oneNotification.viewModel.MainViewModel
 import org.koin.android.ext.koin.androidApplication
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,12 +25,14 @@ val appModule = module{
 
     single { TimePickerFragment.newInstance(null,get()) }
 
-    single { PermissionUtil(it[0])}
+    single { PermissionUtil(get())}
 
     single { LocationProvider(get()) }
     single { createOpenWeatherApi() }
     single { createNewsApi() }
     single { LocationWorker(androidApplication()) }
+
+    viewModel { MainViewModel(get(),get(),get(),get(),get(),get()) }
 }
 
 private fun provideSettingsPreferences(app: Application): SharedPreferences =

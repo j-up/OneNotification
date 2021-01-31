@@ -30,7 +30,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.util.*
 
-
 class MainViewModel(private val timePickerDialog: TimePickerFragment
                     ,private val sharedPreferences: SharedPreferences
                     ,private val locationProvider: LocationProvider
@@ -94,6 +93,7 @@ class MainViewModel(private val timePickerDialog: TimePickerFragment
         timePickerDialog.listener = timeSetListener
 
         _onTimeClickListener.value = timePickerDialog
+        _onTimeClickListener.value = null
     }
 
     fun onWeatherClick(radioGroup: RadioGroup, id:Int) {
