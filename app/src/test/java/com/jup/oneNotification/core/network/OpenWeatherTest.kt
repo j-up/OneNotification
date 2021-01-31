@@ -1,33 +1,33 @@
 package com.jup.oneNotification.core.network
 
 import com.jup.oneNotification.BuildConfig
+import com.jup.oneNotification.core.di.module.appModule
 import com.jup.oneNotification.model.WeatherResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
+import org.koin.test.KoinTest
+import org.koin.test.KoinTestRule
+import org.koin.test.inject
 import org.robolectric.RobolectricTestRunner
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
-class OpenWeatherTest {
+class OpenWeatherTest: KoinTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
-    private val retrofit: OpenWeatherApi by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(OpenWeatherApi::class.java)
+
+    private val openWeatherApi: OpenWeatherApi by inject()
+
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        printLogger()
+        modules(appModule)
     }
 
     @Before
@@ -44,7 +44,7 @@ class OpenWeatherTest {
     @Test
     fun getWeatherTest() {
         CoroutineScope(testDispatcher).launch {
-            val weatherResponse = getWeather(retrofit,testDispatcher)
+            val weatherResponse = getWeather(openWeatherApi,testDispatcher)
 
             Assert.assertEquals("code:${weatherResponse.code()} message:${weatherResponse.message()}"
                 ,weatherResponse.isSuccessful,true)

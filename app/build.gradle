@@ -54,6 +54,7 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.3.1'
 
     implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-core:$koin_version"
     testImplementation "org.koin:koin-test:$koin_version"
     androidTestImplementation "org.koin:koin-test:$koin_version"
 
