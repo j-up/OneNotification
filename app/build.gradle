@@ -25,10 +25,14 @@ android {
         debug {
             buildConfigField 'String', "OpenWeatherKey", keysProperties['OpenWeatherKey']
             buildConfigField 'String', "NewsKey", keysProperties['NewsKey']
+            buildConfigField 'String', "NaverClientId", keysProperties['NaverClientId']
+            buildConfigField 'String', "NaverClientSecret", keysProperties['NaverClientSecret']
         }
         release {
             buildConfigField 'String', "OpenWeatherKey", keysProperties['OpenWeatherKey']
             buildConfigField 'String', "NewsKey", keysProperties['NewsKey']
+            buildConfigField 'String', "NaverClientId", keysProperties['NaverClientId']
+            buildConfigField 'String', "NaverClientSecret", keysProperties['NaverClientSecret']
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

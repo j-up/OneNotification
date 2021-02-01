@@ -1,6 +1,5 @@
-package com.jup.oneNotification.core.network
+package com.jup.oneNotification.core.api
 
-import com.jup.oneNotification.BuildConfig
 import com.jup.oneNotification.core.di.module.appModule
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.*
@@ -11,9 +10,9 @@ import org.koin.test.inject
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NewsApiTest : KoinTest {
+class NaverNewsApiTest : KoinTest {
 
-    private val newsApi: NewsApi by inject()
+    private val naverNewsApi: NaverNewsApi by inject()
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {
@@ -22,18 +21,19 @@ class NewsApiTest : KoinTest {
     }
 
     @Test
-    fun getHeadlineNews() = runBlockingTest {
-        val newResponse = newsApi
-            .getHeadlineNews("kr", BuildConfig.NewsKey)
+    fun getNews() = runBlockingTest {
+        val test = naverNewsApi
+            .getNews("뉴스", 100)
             .execute()
 
         Assert.assertEquals(
-            "code:${newResponse?.code()} message:${newResponse?.message()}"
-            , newResponse?.isSuccessful, true)
+            "code:${test?.code()} message:${test?.message()}"
+            , test?.isSuccessful, true)
 
-        newResponse?.body()?.articles?.map {
-            println(it.title)
-        }
+        println(test.body().items.map {
+            it.title + "\n"
+        })
+
     }
 
 

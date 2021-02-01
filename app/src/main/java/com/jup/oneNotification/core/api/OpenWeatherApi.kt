@@ -1,4 +1,4 @@
-package com.jup.oneNotification.core.network
+package com.jup.oneNotification.core.api
 
 import com.jup.oneNotification.model.WeatherResponse
 import retrofit2.Call

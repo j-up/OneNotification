@@ -1,4 +1,4 @@
-package com.jup.oneNotification.core.network
+package com.jup.oneNotification.core.api
 
 import com.jup.oneNotification.BuildConfig
 import com.jup.oneNotification.core.di.module.appModule

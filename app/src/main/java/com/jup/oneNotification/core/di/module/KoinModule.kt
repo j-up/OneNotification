@@ -3,8 +3,9 @@ package com.jup.oneNotification.core.di.module
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.jup.oneNotification.core.network.NewsApi
-import com.jup.oneNotification.core.network.OpenWeatherApi
+import com.jup.oneNotification.core.api.NaverNewsApi
+import com.jup.oneNotification.core.api.NewsApi
+import com.jup.oneNotification.core.api.OpenWeatherApi
 import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.core.service.LocationWorker
 import com.jup.oneNotification.utils.PermissionUtil
@@ -19,19 +20,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 private const val PREFERENCES_FILE_KEY = "com.jup.onenotification"
 private const val OPENWEATHER_BASE_URL = "http://api.openweathermap.org/"
 private const val NEWS_BASE_URL = "http://newsapi.org/"
+private const val NAVER_BASE_URL = "https://openapi.naver.com/"
 
 val appModule = module{
     single { provideSettingsPreferences(androidApplication()) }
-
     single { TimePickerFragment.newInstance(null,get()) }
-
     single { PermissionUtil(get())}
 
     single { LocationProvider(get()) }
     single { createOpenWeatherApi() }
     single { createNewsApi() }
-    single { LocationWorker(androidApplication()) }
+    single { createNaverNewsApi() }
 
+    single { LocationWorker(androidApplication()) }
     viewModel { MainViewModel(get(),get(),get(),get(),get(),get()) }
 }
 
@@ -52,4 +53,12 @@ private fun createNewsApi(): NewsApi {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(NewsApi::class.java)
+}
+
+private fun createNaverNewsApi(): NaverNewsApi {
+    return Retrofit.Builder()
+        .baseUrl(NAVER_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(NaverNewsApi::class.java)
 }

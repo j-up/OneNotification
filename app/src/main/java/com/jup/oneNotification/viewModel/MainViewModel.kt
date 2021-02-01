@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModel
 import com.jup.oneNotification.BuildConfig
 import com.jup.oneNotification.R
 import com.jup.oneNotification.core.common.KeyData
-import com.jup.oneNotification.core.network.NewsApi
-import com.jup.oneNotification.core.network.OpenWeatherApi
+import com.jup.oneNotification.core.api.NewsApi
+import com.jup.oneNotification.core.api.OpenWeatherApi
 import com.jup.oneNotification.core.provider.LocationProvider
 import com.jup.oneNotification.core.service.LocationWorker
 import com.jup.oneNotification.model.AlarmDate
