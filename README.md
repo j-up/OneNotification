@@ -5,7 +5,6 @@
 ## Stack
 Kotlin<br>
 MVVM<br>
-Repository<br>
 Coroutines<br>
 TDD<br>
 Koin<br>
